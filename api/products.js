@@ -29,16 +29,20 @@ async function connectToDatabase(uri) {
 // The main, exported, function of the endpoint,
 // dealing with the request and subsequent response
 module.exports = async (req, res) => {
-  // Get a database connection, cached or otherwise,
-  // using the connection string environment variable as the argument
-  const db = await connectToDatabase(process.env.MONGODB_URI)
+  try {
+    // Get a database connection, cached or otherwise,
+    // using the connection string environment variable as the argument
+    const db = await connectToDatabase(process.env.MONGODB_URI)
 
-  // Select the "products" collection from the database
-  const collection = await db.collection('products')
+    // Select the "products" collection from the database
+    const collection = await db.collection('products')
 
-  // Select the products collection from the database
-  const products = await collection.find({}).toArray()
+    // Select the products collection from the database
+    const products = await collection.find({}).toArray()
 
-  // Respond with a JSON string of all products in the collection
-  res.status(200).json({ products })
+    // Respond with a JSON string of all products in the collection
+    res.status(200).json({ products })
+  } catch(e) {
+    console.log(e);
+  }
 }
